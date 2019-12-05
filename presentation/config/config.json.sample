@@ -1,0 +1,22 @@
+{
+  "application": {
+    "name": "Flight Web Service",
+    "host": "localhost",
+    "port": "1323"
+  },
+  "supplierConfig": {
+    "sjUseMock": true,
+    "sjApiBaseUrl": "",
+    "sjApiSearchPath": "",
+    "sjApiBookPath": "",
+    "sjApiBookInfoPath": "",
+    "sjApiSetPaymentPath": "",
+    "sjUserName": "",
+    "sjUserPassowd": "",
+    "sjDeviceId": "",
+    "sjSubscribeId": "",
+    "sjOs": "",
+    "sjAppsName": "",
+    "sjAppsVersion": ""
+  }
+}

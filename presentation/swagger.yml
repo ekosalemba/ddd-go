@@ -1,0 +1,746 @@
+openapi: "3.0.2"
+
+info:
+  version: 1.0.0
+  title: Katrina Hotel Service REST Web Service
+  description:
+    Definition Katrina Hotel Service.
+  contact:
+    name:
+    email:
+    url:
+
+servers:
+  - url: '{scheme}://{host}:{port}'
+    #  - url: '{scheme}://{host}:{port}/{basePath}'
+    description: Development Server
+    variables:
+      scheme:
+        description: The API is accessible via https and http (only http on this test)
+        enum:
+          - https
+          - http
+        default: http
+      host:
+        enum:
+          - localhost
+          - staging.server.id
+        default: localhost
+      port:
+        enum:
+          - '80'
+          - '443'
+          - '1323'
+          - '8000'
+        default: '1323'
+#      basePath:
+#        description: Base path
+#        enum:
+#          - api
+#          - flight/api
+#        default: null
+
+tags:
+  - name: Flight
+    description:
+
+paths:
+  /v1/search/{vendorCode}:
+    post:
+      tags:
+        - Flight
+      description: Search
+      operationId: search
+      parameters:
+        - in: path
+          name: vendorCode   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+            example: 'sj'
+      requestBody:
+        description: parameter search
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/searchRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/searchResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/unexpectedError'
+  /v1/book:
+    post:
+      tags:
+        - Flight
+      description: Book
+      operationId: book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bookRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bookInfoResponse'
+  /v1/bookInfo:
+    post:
+      tags:
+        - Flight
+      description: Book Info
+      operationId: bookInfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bookInfoRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bookInfoResponse'
+
+  /v1/setPayment:
+    post:
+      tags:
+        - Flight
+      description: Set Payment
+      operationId: setPayment
+      requestBody:
+        description: parameter search
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/setPaymentRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/setPaymentResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    searchRequest:
+      type: object
+      properties:
+        origin:
+          type: string
+          example: CGK
+        destination:
+          type: string
+          example: DPS
+        departDate:
+          type: string
+          example: "2019-12-11"
+        returnDate:
+          type: string
+          example: "2019-12-14"
+        returnStatus:
+          type: boolean
+          example: true
+        paxCount:
+          type: object
+          properties:
+            adt:
+              type: integer
+              example: 4
+            chd:
+              type: integer
+              example: 3
+            inf:
+              type: integer
+              example: 2
+
+    searchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Success or error
+          example: true
+        message:
+          type: string
+          example: Success
+        errorMessage:
+          type: string
+          example:
+        data:
+          type: object
+          properties:
+            searchKey:
+              type: string
+              example: 12345678901234567890
+            schedules:
+              type: array
+              items:
+                type: object
+                properties:
+                  journeyType:
+                    type: string
+                    example: Departure
+                  origin:
+                    type: string
+                    example: CGK
+                  destination:
+                    type: string
+                    example: DPS
+                  originName:
+                    type: string
+                    example: Jakarta
+                  destinationName:
+                    type: string
+                    example: Denpasar
+                  journeys:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        origin:
+                          type: string
+                          example: CGK
+                        destination:
+                          type: string
+                          example: DPS
+                        originName:
+                          type: string
+                          example: Jakarta
+                        destinationName:
+                          type: string
+                          example: Denpasar
+                        std:
+                          type: string
+                          example: "2019-12-11 06:00"
+                        sta:
+                          type: string
+                          example: "2019-12-11 08:50"
+                        flightDuration:
+                          type: integer
+                          example: 110
+                        description:
+                          type: string
+                          example:
+                        segments:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              carrierCode:
+                                type: string
+                                example: SJ
+                              flightNo:
+                                type: string
+                                example: 272
+                              origin:
+                                type: string
+                                example: CGK
+                              destination:
+                                type: string
+                                example: DPS
+                              originName:
+                                type: string
+                                example: Jakarta
+                              destinationName:
+                                type: string
+                                example: Denpasar
+                              std:
+                                type: string
+                                example: "2019-12-11 06:00"
+                              sta:
+                                type: string
+                                example: "2019-12-11 08:50"
+                              routeStatus:
+                                type: string
+                                example: "D"
+                              legs:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    origin:
+                                      type: string
+                                      example: CGK
+                                    destination:
+                                      type: string
+                                      example: DPS
+                                    originName:
+                                      type: string
+                                      example: Jakarta
+                                    destinationName:
+                                      type: string
+                                      example: Denpasar
+                                    std:
+                                      type: string
+                                      example: "2019-12-11 06:00"
+                                    sta:
+                                      type: string
+                                      example: "2019-12-11 08:50"
+
+    bookRequest:
+      type: object
+      properties:
+        journey:
+          type: object
+          properties:
+            origin:
+              type: string
+              example: CGK
+            destination:
+              type: string
+              example: DPS
+            departDate:
+              type: string
+              example: "2019-12-11"
+            returnDate:
+              type: string
+              example: "2019-12-14"
+            returnStatus:
+              type: boolean
+              example: true
+            paxCount:
+              type: object
+              properties:
+                adt:
+                  type: integer
+                  example: 4
+                chd:
+                  type: integer
+                  example: 3
+                inf:
+                  type: integer
+                  example: 2
+        contact:
+          type: object
+          properties:
+            name:
+              type: string
+              example: John
+            email:
+              type: string
+              example: john@email.id
+            phone:
+              type: string
+              example: 62856626262626
+        pax:
+          type: object
+          properties:
+            adt:
+              type: array
+              items:
+                type: object
+                properties:
+                  suffix:
+                    type: string
+                    example: MR
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  FFNumber:
+                    type: string
+                    example: 7987NKJ
+            chd:
+              type: array
+              items:
+                type: object
+                properties:
+                  suffix:
+                    type: string
+                    example: MR
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  dob:
+                    type: string
+                    example: "2005-12-01"
+            inf:
+              type: array
+              items:
+                type: object
+                properties:
+                  suffix:
+                    type: string
+                    example: MR
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  dob:
+                    type: string
+                    example: "2005-12-01"
+                  adtAssoc:
+                    type: integer
+                    example: 1
+        selectedItineraries:
+          type: object
+          properties:
+            searchKey:
+              type: string
+              example: "1238189172309812703918273019287390"
+            journeys:
+              type: array
+              items:
+                type: object
+                properties:
+                  journeyType:
+                    type: string
+                    example: Departure
+                  selectedCabin:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        subClass:
+                          type: string
+                          example: Y
+                        key:
+                          type: string
+                          example: "19492131:Y:S"
+
+    bookInfoRequest:
+      type: object
+      properties:
+        bookingCode:
+          type: string
+          example: XXDF78J
+
+    bookInfoResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Success or error
+          example: true
+        message:
+          type: string
+          example: Success
+        errorMessage:
+          type: string
+          example:
+        data:
+          type: object
+          properties:
+            bookingCode:
+              type: string
+              example: XXDF78J
+            numericBookingCode:
+              type: string
+              example: 719237912310
+            promoCode:
+              type: string
+              example: 809JJLK
+            paymentMethod:
+              type: string
+              example: ATM
+            paymentStatus:
+              type: string
+              example: Need Payment
+            checkInFlag:
+              type: string
+              example:
+            checkInDate:
+              type: string
+              example:
+            itineraryDetails:
+              type: object
+              properties:
+                reservationDetails:
+                  type: object
+                  properties:
+                    bookingCode:
+                      type: string
+                      example: XXDF78J
+                    bookingDate:
+                      type: string
+                      example: 03 Jul 2019 08:55 (GMT+7)
+                    currencyCode:
+                      type: string
+                      example: IDR
+                    balanceDue:
+                      type: float
+                      example: 980000
+                    balanceDueRemarks:
+                      type: string
+                      example: "*Extra Cover Insurance (STI) not include in balance due."
+                    bookingStatus:
+                      type: string
+                      example: Hold
+                    timeInfo:
+                      type: string
+                      example: "10 Jan 2020 09:55 (GMT+7)"
+                    timeInfoDescription:
+                      type: string
+                      example: "TimeLimit"
+                passengerDetails:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      no:
+                        type: integer
+                        example: 1
+                      suffix:
+                        type: string
+                        example: Mr
+                      firstName:
+                        type: string
+                        example: John
+                      lastName:
+                        type: string
+                        example: Doe
+                      seatQty:
+                        type: integer
+                        example: 1
+                      ticketNumber:
+                        type: string
+                        example: "9771234567890C1, C2, C3, C4"
+                      frequentFlyerNumber:
+                        type: string
+                        example: JALSJ796KJB
+                      specialRequest:
+                        type: string
+                        example: N/A
+                      seatNo:
+                        type: string
+                        example: 25A/26B/27C/28D
+                itineraries:
+                  type: object
+                  properties:
+                    journeys:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          journeyType:
+                            type: string
+                            example: Departure
+                          segments:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                flownDate:
+                                  type: string
+                                  example: "2020-1-10"
+                                carrierCode:
+                                  type: string
+                                  example: "SJ"
+                                flightNo:
+                                  type: string
+                                  example: "219"
+                                origin:
+                                  type: string
+                                  example: "JOG"
+                                originName:
+                                  type: string
+                                  example: "Yogyakarta"
+                                destination:
+                                  type: string
+                                  example: "CGK"
+                                destinationName:
+                                  type: string
+                                  example: "Jakarta"
+                                stdLT:
+                                  type: string
+                                  example: "05:0 LT"
+                                staLT:
+                                  type: string
+                                  example: "06:0 LT"
+                                reservationStatus:
+                                  type: string
+                                  example: "HK"
+                                subClass:
+                                  type: string
+                                  example: "Y"
+                                checkInStatus:
+                                  type: string
+                                  example: "NO"
+
+                paymentDetails:
+                  type: object
+                  properties:
+                    currencyCode:
+                      type: string
+                      example: IDR
+                    basicFare:
+                      type: float
+                      example: 38502000
+                    otherFare:
+                      type: float
+                      example: 5080200
+                    STIFare:
+                      type: float
+                      example: null
+                    totalFare:
+                      type: float
+                      example: 43582200
+                    directVoucher:
+                      type: float
+                      example: 0
+                    addOnFare:
+                      type: float
+                      example: 0
+                    ntaFare:
+                      type: float
+                      example: 42837000
+                contactList:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: Email
+                      description:
+                        type: string
+                        example: Main
+                      value:
+                        type: string
+                        example: customer@email.id
+                agentDetails:
+                  type: object
+                  properties:
+                    bookedBy:
+                      type: string
+                      example: ABC123
+                    issuedBy:
+                      type: string
+                      example: ABC123
+                bookingRemarks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      commentText:
+                        type: string
+                        example: std at 4 pm local time
+                      createdBy:
+                        type: string
+                        example: CreatedBy
+                      createdDate:
+                        type: string
+                        example: 10 Jan 2020 10:24 (GMT+7)
+                      ipAddress:
+                        type: string
+                        example: 10.10.10.10
+                additionalInformation:
+                  type: object
+                  properties:
+
+    setPaymentRequest:
+      type: object
+      properties:
+        payment:
+          type: object
+          properties:
+            paymentMethod:
+              type: string
+              example: abc
+            paymentCardName:
+              type: string
+              example: abc
+            paymentTenor:
+              type: string
+              example: abc
+            paymentEmail:
+              type: string
+              example: abc
+            paymentContact:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: email@domain.id
+                phone:
+                  type: string
+                  example: 08098999
+        FFInfo:
+          type: object
+          properties:
+            FFType:
+              type: string
+              example: abc
+            FFNumber:
+              type: string
+              example: abc
+            FFPassword:
+              type: string
+              example: abc
+            FFPoint:
+              type: string
+              example: abc
+
+    setPaymentResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Success or error
+          example: true
+        message:
+          type: string
+          example: Success
+        errorMessage:
+          type: string
+          example:
+        data:
+          type: object
+          properties:
+            paymentCode:
+              type: string
+              example: "7771234567890"
+            paymentMethod:
+              type: string
+              example: "ATM-BCA"
+            paymentMethodDescription:
+              type: string
+              example: "ATM"
+            paymentAmount:
+              type: float
+              example: 51640200
+            FFDetail:
+              type: string
+              example: null
+            specialRequest:
+              type: string
+              example: "N/A"
+            BNIWOW:
+              type: string
+              example: NO
+
+    unexpectedError:
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: Internal Server Error
