@@ -37,9 +37,6 @@ func SjSplSearch(searchRequest domain.SearchRequest) (domain.SearchResponse, err
 	return searchResponse, err
 }
 
-func SjSplBook() {
-
-}
 func SjSplSetPayment(setPaymentRequest domain.SetPaymentRequest) (domain.SetPaymentResponse, error) {
 	path := SjBookInfoPath()
 	payload := MapSjSetPaymentRequest(setPaymentRequest, path)
@@ -76,6 +73,35 @@ func SjSplBookInfo(bookInfoRequest domain.BookInfoRequest) (domain.BookInfoRespo
 	var err error = nil
 	if SjUseMock() {
 		response, err = BookInfoMock(), nil
+	} else {
+		response, err = SendRequest(path, "POST", payload)
+	}
+
+	var responseSpl domain.SjBookInfoResponse
+	errParse := json.Unmarshal(response, &responseSpl)
+	if (errParse != nil) {
+		fmt.Println("Parse failed with error: ", errParse)
+	}
+	bookInfoData := domain.BookInfoData{}
+	var bookInfoResponse domain.BookInfoResponse
+	if err != nil {
+		bookInfoResponse = domain.BookInfoResponse{domain.BaseResponse{false, "", "Internal Server Error"}, domain.BookInfoData{}}
+	} else {
+		bookInfoData = MapSjBookInfoResponse(responseSpl)
+		bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: bookInfoData}
+	}
+	return bookInfoResponse, err
+	//LZYHFE
+}
+
+func SjSplBook(bookRequest domain.BookRequest) (domain.BookInfoResponse, error) {
+	path := SjBookInfoPath()
+	payload := MapSjBookRequest(bookRequest, path)
+
+	var response []byte = nil
+	var err error = nil
+	if SjUseMock() {
+		response, err = BookMock(), nil
 	} else {
 		response, err = SendRequest(path, "POST", payload)
 	}

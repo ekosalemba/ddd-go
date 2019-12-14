@@ -139,6 +139,21 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 	return searchResponseData
 }
 
+func MapSjBookRequest(bookRequest domain.BookRequest, path string) *strings.Reader {
+	payload := strings.NewReader(
+		"BookingCode=" + bookRequest.Journey.Origin +
+			"&DEVICE_ID=" + SjConfigGetDeviceId() +
+			"&SUBSCRIBE_ID=" + SjConfigGetSubscribeId() +
+			"&USERNAME=" + SjConfigGetUserName() +
+			"&PASSWORD=" + SjConfigGetPassword() +
+			"&OS=" + SjConfigGetOs() +
+			"&APPS_NAME=" + SjConfigGetAppsName() +
+			"&APPS_VERSION=" + SjConfigGetAppsVersion() +
+			"&API_URL=" + SjConfigGetAPibaseUrl() + path +
+			"&USER_LOGIN=")
+	return payload
+}
+
 func MapSjBookInfoRequest(bookInfoRequest domain.BookInfoRequest, path string) *strings.Reader {
 	payload := strings.NewReader(
 		"BookingCode=" + bookInfoRequest.BookingCode +
@@ -247,7 +262,18 @@ func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInf
 
 func MapSjSetPaymentRequest(setPaymentRequest domain.SetPaymentRequest, path string) *strings.Reader {
 	payload := strings.NewReader(
-		"BookingCode=" + setPaymentRequest.Payment.PaymentMethod +
+		"BOOKING_CODE=" + setPaymentRequest.BookingCode +
+			"&NAMA_PEMEGANG_KARTU=" + setPaymentRequest.Payment.PaymentCardName +
+			"&RECEIVED_PHONE=" + setPaymentRequest.Payment.PaymentContact.Phone +
+			"&PAYMENT_METHOD=" + setPaymentRequest.Payment.PaymentMethod +
+			"&EMAIL=" + setPaymentRequest.Payment.PaymentEmail +
+			"&EMAIL_CP=" + setPaymentRequest.Payment.PaymentEmail +
+			"&TENOR=" + setPaymentRequest.Payment.PaymentTenor +
+			"&FFNO=" + setPaymentRequest.FFInfo.FFNumber +
+			"&PASSWORD_FF=" + setPaymentRequest.FFInfo.FFPassword +
+			"&POINT=" + setPaymentRequest.FFInfo.FFPoint +
+			"&FF_TYPE=" + setPaymentRequest.FFInfo.FFType +
+
 			"&DEVICE_ID=" + SjConfigGetDeviceId() +
 			"&SUBSCRIBE_ID=" + SjConfigGetSubscribeId() +
 			"&USERNAME=" + SjConfigGetUserName() +

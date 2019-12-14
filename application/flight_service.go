@@ -25,8 +25,13 @@ func Search(vendorCode string, request domain.SearchRequest) (int, domain.Search
 	}
 }
 
-func Book() {
-
+func Book(request domain.BookRequest) (int, domain.BookInfoResponse, domain.ErrorResponse) {
+	valid, response := request.Validate()
+	if !valid {
+		return http.StatusBadRequest, domain.BookInfoResponse{}, response
+	} else {
+		return http.StatusOK, infrastructure.SjBook(request), domain.ErrorResponse{}
+	}
 }
 
 func BookInfo(request domain.BookInfoRequest) (int, domain.BookInfoResponse, domain.ErrorResponse) {

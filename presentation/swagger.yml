@@ -335,7 +335,7 @@ components:
               example: john@email.id
             phone:
               type: string
-              example: 62856626262626
+              example: "62856626262626"
         pax:
           type: object
           properties:
@@ -652,6 +652,9 @@ components:
     setPaymentRequest:
       type: object
       properties:
+        bookingCode:
+          type: string
+          example: 789HYF
         payment:
           type: object
           properties:

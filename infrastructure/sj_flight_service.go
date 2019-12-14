@@ -9,9 +9,11 @@ func SjSearch(req domain.SearchRequest) domain.SearchResponse {
 	return searchResponse
 }
 
-func SjBook() {
-
+func SjBook(req domain.BookRequest) domain.BookInfoResponse {
+	response, _ := SjSplBook(req)
+	return response
 }
+
 func SjBookInfo(req domain.BookInfoRequest) domain.BookInfoResponse {
 	response, _ := SjSplBookInfo(req)
 	return response

@@ -27,11 +27,11 @@ func RouteFlight(e *echo.Echo) {
 	})
 
 	e.POST("/v1/book", func(c echo.Context) error {
-		request := new(domain.BookInfoRequest)
+		request := new(domain.BookRequest)
 		if err := c.Bind(request); err != nil {
 			return err
 		}
-		status, response, errorResponse := application.BookInfo(*request)
+		status, response, errorResponse := application.Book(*request)
 		if status != http.StatusOK {
 			return c.JSON(status, errorResponse)
 		}

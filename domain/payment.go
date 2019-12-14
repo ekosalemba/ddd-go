@@ -3,8 +3,9 @@ package domain
 import "strings"
 
 type SetPaymentRequest struct {
-	Payment Payment `json:"payment"`
-	FFInfo  FFInfo  `json:"FFInfo"`
+	BookingCode string  `json:"bookingCode"`
+	Payment     Payment `json:"payment"`
+	FFInfo      FFInfo  `json:"FFInfo"`
 }
 type SetPaymentResponse struct {
 	BaseResponse
@@ -32,9 +33,14 @@ func (data SetPaymentRequest) Validate() (bool, ErrorResponse) {
 	valid := true
 	var message string
 	var messages []ErrorMessage
+	if (len(strings.TrimSpace(data.BookingCode)) == 0) {
+		messages = append(messages, ErrorMessage{"", "bookingCode is required!"})
+	}
 	if (len(strings.TrimSpace(data.Payment.PaymentMethod)) == 0) {
-		valid = false
 		messages = append(messages, ErrorMessage{"", "paymentMethod is required!"})
+	}
+	if len(messages) > 0 {
+		valid = false
 		message = "Some field are required"
 	}
 	response := ErrorResponse{BaseResponse{false, "", message}, messages}

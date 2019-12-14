@@ -68,7 +68,7 @@ func (data SearchRequest) Validate() (bool, ErrorResponse) {
 	}
 	if len(messages) > 0 {
 		valid = false
-		message = "Some file is required"
+		message = "Some field are required"
 	}
 	response := ErrorResponse{BaseResponse{false, "", message}, messages}
 	return valid, response
