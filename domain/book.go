@@ -287,6 +287,7 @@ type Pax struct {
 		FirstName string `json:"firstName"`
 		LastName  string `json:"lastName"`
 		Dob       string `json:"dob"`
+		FFNumber  string `json:"FFNumber"`
 	} `json:"chd"`
 	Inf []struct {
 		Suffix    string `json:"suffix"`

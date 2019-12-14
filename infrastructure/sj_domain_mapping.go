@@ -140,8 +140,81 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 }
 
 func MapSjBookRequest(bookRequest domain.BookRequest, path string) *strings.Reader {
+	returnStatus := "NO"
+	if bookRequest.Journey.ReturnStatus {
+		returnStatus = "YES"
+	}
+	departDate, _ := time.Parse("2006-01-02", bookRequest.Journey.DepartDate)
+	departDateStr := departDate.Format("02-Jan-2006")
+	returnDate, _ := time.Parse("2006-01-02", bookRequest.Journey.ReturnDate)
+	returnDateStr := returnDate.Format("02-Jan-2006")
+	// adt
+	adt := ""
+	for i := 0; i < len(bookRequest.Pax.Adt); i++ {
+		index := strconv.Itoa(i)
+		adt += "&AdultNames[" + index + "][0][id]=" + "ipAdult" + index
+		adt += "&AdultNames[" + index + "][0][Suffix]=" + strings.ToUpper(bookRequest.Pax.Adt[i].Suffix)
+		adt += "&AdultNames[" + index + "][0][FirstName]=" + bookRequest.Pax.Adt[i].FirstName
+		adt += "&AdultNames[" + index + "][0][LastName]=" + bookRequest.Pax.Adt[i].LastName
+		adt += "&AdultNames[" + index + "][0][FFNo]=" + bookRequest.Pax.Adt[i].FFNumber
+		adt += "&AdultNames[" + index + "][0][Assoc]=" + index
+	}
+	// chd
+	chd := ""
+	for i := 0; i < len(bookRequest.Pax.Chd); i++ {
+		index := strconv.Itoa(i)
+		dob, _ := time.Parse("2006-01-02", bookRequest.Pax.Chd[i].Dob)
+		dobStr := dob.Format("02-Jan-2006")
+		chd += "&ChildNames[" + index + "][0][id]=" + "ipChild" + index
+		chd += "&ChildNames[" + index + "][0][Suffix]=" + strings.ToUpper(bookRequest.Pax.Chd[i].Suffix)
+		chd += "&ChildNames[" + index + "][0][FirstName]=" + bookRequest.Pax.Chd[i].FirstName
+		chd += "&ChildNames[" + index + "][0][LastName]=" + bookRequest.Pax.Chd[i].LastName
+		chd += "&ChildNames[" + index + "][0][FFNo]=" + bookRequest.Pax.Chd[i].FFNumber
+		chd += "&ChildNames[" + index + "][0][Dob]=" + dobStr
+	}
+	//inf
+	inf := ""
+	for i := 0; i < len(bookRequest.Pax.Inf); i++ {
+		index := strconv.Itoa(i)
+		dob, _ := time.Parse("2006-01-02", bookRequest.Pax.Inf[i].Dob)
+		dobStr := dob.Format("02-Jan-2006")
+		inf += "&InfantNames[" + index + "][0][id]=" + "ipInfant" + index
+		inf += "&InfantNames[" + index + "][0][Suffix]=" + strings.ToUpper(bookRequest.Pax.Inf[i].Suffix)
+		inf += "&InfantNames[" + index + "][0][FirstName]=" + bookRequest.Pax.Inf[i].FirstName
+		inf += "&InfantNames[" + index + "][0][LastName]=" + bookRequest.Pax.Inf[i].LastName
+		chd += "&InfantNames[" + index + "][0][Dob]=" + dobStr
+		inf += "&InfantNames[" + index + "][0][Assoc]=" + strconv.Itoa(bookRequest.Pax.Inf[i].AdtAssoc)
+	}
+
+	//itin
+	selectedItineraries := ""
+	selectedItinerariesKey := 0;
+	for _, journey := range bookRequest.SelectedItineraries.Journeys {
+		for _, segment := range journey.SelectedCabin {
+			selectedItineraries += "&Keys[" + strconv.Itoa(selectedItinerariesKey) + "][Category]=" + journey.JourneyType
+			selectedItineraries += "&Keys[" + strconv.Itoa(selectedItinerariesKey) + "][Key]=" + segment.Key
+			selectedItinerariesKey++
+		}
+	}
 	payload := strings.NewReader(
-		"BookingCode=" + bookRequest.Journey.Origin +
+		"CityFrom=" + bookRequest.Journey.Origin +
+			"&CityTo=" + bookRequest.Journey.Destination +
+			"&DepartDate=" + departDateStr +
+			"&ReturnStatus=" + returnStatus +
+			"&ReturnDate=" + returnDateStr +
+			"&PromoCode=" + "" +
+			"&Adult=" + bookRequest.Journey.Origin +
+			"&Child=" + bookRequest.Journey.Origin +
+			"&Infant=" + bookRequest.Journey.Origin +
+			"&SearchKey=" + bookRequest.SelectedItineraries.SearchKey +
+			"&Email=" + bookRequest.Contact.Email +
+			"&Received=" + bookRequest.Contact.Name +
+			"&ReceivedPhone=" + bookRequest.Contact.Phone +
+			"&ExtraCoverAddOns=" + "NO" +
+			adt +
+			chd +
+			inf +
+			selectedItineraries +
 			"&DEVICE_ID=" + SjConfigGetDeviceId() +
 			"&SUBSCRIBE_ID=" + SjConfigGetSubscribeId() +
 			"&USERNAME=" + SjConfigGetUserName() +

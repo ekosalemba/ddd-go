@@ -373,6 +373,9 @@ components:
                   dob:
                     type: string
                     example: "2005-12-01"
+                  FFNumber:
+                    type: string
+                    example: 7987NKJ
             inf:
               type: array
               items:
