@@ -166,13 +166,13 @@ func (data BookRequest) Validate() (bool, ErrorResponse) {
 	} else {
 		for i := 0; i < len(data.Pax.Adt); i++ {
 			if len(data.Pax.Adt[i].Suffix) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax adt [" + strconv.Itoa(i) + "] suffix is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax adt[" + strconv.Itoa(i) + "] suffix is not valid!"})
 			}
 			if len(data.Pax.Adt[i].FirstName) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax adt [" + strconv.Itoa(i) + "] first name is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax adt[" + strconv.Itoa(i) + "] first name is not valid!"})
 			}
 			if len(data.Pax.Adt[i].LastName) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax adt [" + strconv.Itoa(i) + "] last name is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax adt[" + strconv.Itoa(i) + "] last name is not valid!"})
 			}
 		}
 	}
@@ -182,17 +182,17 @@ func (data BookRequest) Validate() (bool, ErrorResponse) {
 
 		for i := 0; i < len(data.Pax.Chd); i++ {
 			if len(data.Pax.Chd[i].Suffix) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax chd [" + strconv.Itoa(i) + "] suffix is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax chd[" + strconv.Itoa(i) + "] suffix is not valid!"})
 			}
 			if len(data.Pax.Chd[i].FirstName) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax chd [" + strconv.Itoa(i) + "] first name is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax chd[" + strconv.Itoa(i) + "] first name is not valid!"})
 			}
 			if len(data.Pax.Chd[i].LastName) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax chd [" + strconv.Itoa(i) + "] last name is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax chd[" + strconv.Itoa(i) + "] last name is not valid!"})
 			}
 			_, err := time.Parse("2006-01-02", data.Pax.Chd[i].Dob)
 			if err != nil {
-				messages = append(messages, ErrorMessage{"", "pax chd [" + strconv.Itoa(i) + "] date of birth is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax chd[" + strconv.Itoa(i) + "] date of birth is not valid!"})
 			}
 		}
 	}
@@ -202,21 +202,21 @@ func (data BookRequest) Validate() (bool, ErrorResponse) {
 		var adtAssoc []int
 		for i := 0; i < len(data.Pax.Inf); i++ {
 			if len(data.Pax.Inf[i].Suffix) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax inf [" + strconv.Itoa(i) + "] suffix is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] suffix is not valid!"})
 			}
 			if len(data.Pax.Inf[i].FirstName) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax inf [" + strconv.Itoa(i) + "] first name is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] first name is not valid!"})
 			}
 			if len(data.Pax.Inf[i].LastName) == 0 {
-				messages = append(messages, ErrorMessage{"", "pax inf [" + strconv.Itoa(i) + "] last name is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] last name is not valid!"})
 			}
 			_, err := time.Parse("2006-01-02", data.Pax.Inf[i].Dob)
 			if err != nil {
-				messages = append(messages, ErrorMessage{"", "pax inf [" + strconv.Itoa(i) + "] date of birth is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] date of birth is not valid!"})
 			}
 
 			if data.Pax.Inf[i].AdtAssoc <= 0 || data.Pax.Inf[i].AdtAssoc > data.Journey.PaxCount.Adt {
-				messages = append(messages, ErrorMessage{"", "pax inf [" + strconv.Itoa(i) + "] adt assoc is not valid!"})
+				messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] adt assoc is not valid!"})
 			} else {
 				isExistAdtAssoc := false
 				for i := 0; i < len(adtAssoc); i++ {
@@ -224,10 +224,10 @@ func (data BookRequest) Validate() (bool, ErrorResponse) {
 						isExistAdtAssoc = true
 					}
 				}
-				if isExistAdtAssoc {
+				if !isExistAdtAssoc {
 					adtAssoc = append(adtAssoc, data.Pax.Inf[i].AdtAssoc)
 				} else {
-					messages = append(messages, ErrorMessage{"", "pax inf [" + strconv.Itoa(i) + "] adt assoc duplicate!"})
+					messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] adt assoc duplicate!"})
 				}
 			}
 		}
