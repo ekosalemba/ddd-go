@@ -22,16 +22,9 @@ servers:
           - http
         default: http
       host:
-        enum:
-          - localhost
-          - staging.server.id
         default: localhost
       port:
         enum:
-          - '80'
-          - '443'
-          - '1323'
-          - '8000'
         default: '1323'
 #      basePath:
 #        description: Base path

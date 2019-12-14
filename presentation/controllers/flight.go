@@ -18,11 +18,23 @@ func RouteFlight(e *echo.Echo) {
 		vendorCode := c.Param("vendorCode", )
 		//fmt.Println(time.Now(), "Start")
 		status, response, errorResponse := application.Search(vendorCode, *request)
-		if (status != http.StatusOK) {
+		if status != http.StatusOK {
 			return c.JSON(status, errorResponse)
 		}
 		fmt.Println(time.Now(), "Finish")
 		//time.Sleep(10 * time.Second)
+		return c.JSON(status, response)
+	})
+
+	e.POST("/v1/book", func(c echo.Context) error {
+		request := new(domain.BookInfoRequest)
+		if err := c.Bind(request); err != nil {
+			return err
+		}
+		status, response, errorResponse := application.BookInfo(*request)
+		if status != http.StatusOK {
+			return c.JSON(status, errorResponse)
+		}
 		return c.JSON(status, response)
 	})
 
@@ -32,7 +44,19 @@ func RouteFlight(e *echo.Echo) {
 			return err
 		}
 		status, response, errorResponse := application.BookInfo(*request)
-		if (status != http.StatusOK) {
+		if status != http.StatusOK {
+			return c.JSON(status, errorResponse)
+		}
+		return c.JSON(status, response)
+	})
+
+	e.POST("/v1/setPayment", func(c echo.Context) error {
+		request := new(domain.SetPaymentRequest)
+		if err := c.Bind(request); err != nil {
+			return err
+		}
+		status, response, errorResponse := application.SetPayment(*request)
+		if status != http.StatusOK {
 			return c.JSON(status, errorResponse)
 		}
 		return c.JSON(status, response)

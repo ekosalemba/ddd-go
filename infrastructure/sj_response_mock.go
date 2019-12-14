@@ -3458,6 +3458,8 @@ func SearchMock() []byte {
 }
 func BookInfoMock() []byte {
 	mockResponse := []byte(`{
+	"ERROR_CODE": "EC:0000",
+    "ERROR_MESSAGE": "Success.",
     "DATA": {
       "BookingCode": "QRHEYH",
       "CHECKIN_DATE": "",
@@ -3569,5 +3571,263 @@ func BookInfoMock() []byte {
     "ERROR_CODE": "EC:0000",
     "ERROR_MESSAGE": "Success."
   }`)
+	return mockResponse
+}
+func BookMock() []byte {
+	mockResponse := []byte(`{
+    "ERROR_CODE": "EC:0000",
+    "ERROR_MESSAGE": "Success.",
+    "DATA": {
+        "Username": "AMBOOKING",
+        "BookingCode": "FCBNUG",
+        "PromoCode": null,
+        "YourItineraryDetails": {
+            "ReservationDetails": {
+                "BookingCode": "FCBNUG",
+                "BookingDate": "06 Jul 2019 23:57 (GMT+7)",
+                "BalanceDue": "40044600",
+                "BalanceDueRemarks": "*Extra Cover Insurance (STI) not include in balance due.",
+                "CurrencyCode": "IDR",
+                "Time": "07 Jul 2019 00:57 (GMT+7)",
+                "TimeDescription": "TimeLimit",
+                "Status": "Hold"
+            },
+            "PassengerDetails": [
+                {
+                    "No": "1",
+                    "Suffix": "Mr",
+                    "FirstName": "AGUNG",
+                    "LastName": "BUDI",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "2",
+                    "Suffix": "Mrs",
+                    "FirstName": "JINGGA",
+                    "LastName": "RATNA",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "3",
+                    "Suffix": "Mr",
+                    "FirstName": "RUDI",
+                    "LastName": "SANTOSA",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "4",
+                    "Suffix": "Mr",
+                    "FirstName": "IBRAHIM",
+                    "LastName": "SAMAD",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "5",
+                    "Suffix": "Mrs",
+                    "FirstName": "VIA",
+                    "LastName": "RAHMA",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "6",
+                    "Suffix": "Mstr",
+                    "FirstName": "YUDHA",
+                    "LastName": "MUBAROK",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "7",
+                    "Suffix": "Miss",
+                    "FirstName": "ARMIN",
+                    "LastName": "VAHIRA",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "8",
+                    "Suffix": "Miss",
+                    "FirstName": "CITRA",
+                    "LastName": "PUTRI",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "9",
+                    "Suffix": "Miss",
+                    "FirstName": "INDAH",
+                    "LastName": "PERMATA",
+                    "SeatQty": "1",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "10",
+                    "Suffix": "Inf",
+                    "FirstName": "MALIKA",
+                    "LastName": "PUTRI",
+                    "SeatQty": "0",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "11",
+                    "Suffix": "Inf",
+                    "FirstName": "YULAIKHA",
+                    "LastName": "PUTRI",
+                    "SeatQty": "0",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                },
+                {
+                    "No": "12",
+                    "Suffix": "Inf",
+                    "FirstName": "AISHA",
+                    "LastName": "PUTRI",
+                    "SeatQty": "0",
+                    "TicketNumber": "N/A",
+                    "FrequentFlyerNumber": null,
+                    "SpecialRequest": "N/A"
+                }
+            ],
+            "ItineraryDetails": {
+                "Journey": [
+                    {
+                        "Segment": [
+                            {
+                                "FlownDate": "20-NOV-19",
+                                "FlightNo": "SJ219",
+                                "CityFrom": "JOG",
+                                "CityTo": "CGK",
+                                "CityFromName": "Yogyakarta",
+                                "CityToName": "Jakarta",
+                                "StdLT": "05:00 LT",
+                                "StaLT": "06:00 LT",
+                                "ReservationStatus": "HK",
+                                "Class": "Y",
+                                "CheckInStatus": "NO"
+                            },
+                            {
+                                "FlownDate": "20-NOV-19",
+                                "FlightNo": "SJ032",
+                                "CityFrom": "CGK",
+                                "CityTo": "BTH",
+                                "CityFromName": "Jakarta",
+                                "CityToName": "Batam",
+                                "StdLT": "07:00 LT",
+                                "StaLT": "08:35 LT",
+                                "ReservationStatus": "HK",
+                                "Class": "K",
+                                "CheckInStatus": "NO"
+                            }
+                        ]
+                    },
+                    {
+                        "Segment": [
+                            {
+                                "FlownDate": "23-NOV-19",
+                                "FlightNo": "SJ033",
+                                "CityFrom": "BTH",
+                                "CityTo": "CGK",
+                                "CityFromName": "Batam",
+                                "CityToName": "Jakarta",
+                                "StdLT": "13:05 LT",
+                                "StaLT": "14:45 LT",
+                                "ReservationStatus": "HK",
+                                "Class": "K",
+                                "CheckInStatus": "NO"
+                            },
+                            {
+                                "FlownDate": "23-NOV-19",
+                                "FlightNo": "SJ234",
+                                "CityFrom": "CGK",
+                                "CityTo": "JOG",
+                                "CityFromName": "Jakarta",
+                                "CityToName": "Yogyakarta",
+                                "StdLT": "17:45 LT",
+                                "StaLT": "18:55 LT",
+                                "ReservationStatus": "HK",
+                                "Class": "Y",
+                                "CheckInStatus": "NO"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "PaymentDetails": {
+                "BasicFare": "35286000",
+                "Others": "4758600",
+                "Sti": null,
+                "Total": "40044600",
+                "DirectVoucher": "0",
+                "AddOn": "0",
+                "Nta": "39361320",
+                "CurrencyCode": "IDR"
+            },
+            "ContactList": [
+                {
+                    "Type": "Phone",
+                    "Description": "Main",
+                    "Value": "090897779"
+                },
+                {
+                    "Type": "Email",
+                    "Description": "Work",
+                    "Value": "AGUNG.UI09@GMAIL.COM"
+                }
+            ],
+            "AgentDetails": {
+                "BookedBy": "AMBOOKING",
+                "IssuedBy": "-"
+            },
+            "BookingRemarks": null,
+            "AdditionalInformation": null
+        },
+        "ErrorCode": "GENERATE0000",
+        "ErrorMessage": "Success."
+    }
+}`)
+	return mockResponse
+}
+func SetPaymentMock() []byte {
+	mockResponse := []byte(`{
+    "ERROR_CODE": "EC:0000",
+    "ERROR_MESSAGE": "Success",
+    "DATA": [
+        {
+            "PAYMENT_CODE": "7779133040527",
+            "PAYMENT_METHOD": "ATM-BCA",
+            "PAYMENT_METHOD_DESCRIPTION": "ATM",
+            "AMOUNT": 40044600,
+            "FF_DETAIL": null,
+            "SPECIAL_REQUEST": "",
+            "BNIWOW": "NO"
+        }
+    ]
+}`)
 	return mockResponse
 }

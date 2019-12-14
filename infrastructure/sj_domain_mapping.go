@@ -244,3 +244,30 @@ func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInf
 	bookInfoData.ItineraryDetails.AdditionalInformation = responseSpl.DATA.YourItineraryDetails.AdditionalInformation
 	return bookInfoData
 }
+
+func MapSjSetPaymentRequest(setPaymentRequest domain.SetPaymentRequest, path string) *strings.Reader {
+	payload := strings.NewReader(
+		"BookingCode=" + setPaymentRequest.Payment.PaymentMethod +
+			"&DEVICE_ID=" + SjConfigGetDeviceId() +
+			"&SUBSCRIBE_ID=" + SjConfigGetSubscribeId() +
+			"&USERNAME=" + SjConfigGetUserName() +
+			"&PASSWORD=" + SjConfigGetPassword() +
+			"&OS=" + SjConfigGetOs() +
+			"&APPS_NAME=" + SjConfigGetAppsName() +
+			"&APPS_VERSION=" + SjConfigGetAppsVersion() +
+			"&API_URL=" + SjConfigGetAPibaseUrl() + path +
+			"&USER_LOGIN=")
+	return payload
+}
+
+func MapSjSetPaymentResponse(responseSpl domain.SjSetPaymentResponse) domain.SetPaymentData {
+	setPaymentData := domain.SetPaymentData{}
+	setPaymentData.PaymentCode = responseSpl.Data[0].PaymentCode
+	setPaymentData.PaymentMethod = responseSpl.Data[0].PaymentMethod
+	setPaymentData.PaymentMethodDescription = responseSpl.Data[0].PaymentMethodDescription
+	setPaymentData.PaymentAmount = responseSpl.Data[0].Amount
+	setPaymentData.FFDetail = responseSpl.Data[0].FFDetail
+	setPaymentData.SpecialRequest = responseSpl.Data[0].SpecialRequest
+	setPaymentData.BNIWOW = responseSpl.Data[0].BNIWOW
+	return setPaymentData
+}

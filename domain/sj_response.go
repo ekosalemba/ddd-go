@@ -168,3 +168,17 @@ type SjBookInfoResponse struct {
 	ERRORCODE    string `json:"ERROR_CODE"`
 	ERRORMESSAGE string `json:"ERROR_MESSAGE"`
 }
+
+type SjSetPaymentResponse struct {
+	Data []struct {
+		PaymentCode              string  `json:"PAYMENT_CODE"`
+		PaymentMethod            string  `json:"PAYMENT_METHOD"`
+		PaymentMethodDescription string  `json:"PAYMENT_METHOD_DESCRIPTION"`
+		Amount                   float64 `json:"AMOUNT"`
+		FFDetail                 string  `json:"FF_DETAIL"`
+		SpecialRequest           string  `json:"SPECIAL_REQUEST"`
+		BNIWOW                   string  `json:"BNIWOW"`
+	} `json:"DATA"`
+	ErrorCode    string `json:"ERROR_CODE" xml""ERROR_CODE"`
+	ErrorMessage string `json:"ERROR_MESSAGE" xml"ERROR_MESSAGE"`
+}

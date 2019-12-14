@@ -38,6 +38,11 @@ func BookInfo(request domain.BookInfoRequest) (int, domain.BookInfoResponse, dom
 	}
 }
 
-func SetPayment() {
-
+func SetPayment(request domain.SetPaymentRequest) (int, domain.SetPaymentResponse, domain.ErrorResponse) {
+	valid, response := request.Validate()
+	if !valid {
+		return http.StatusBadRequest, domain.SetPaymentResponse{}, response
+	} else {
+		return http.StatusOK, infrastructure.SjSetPayment(request), domain.ErrorResponse{}
+	}
 }

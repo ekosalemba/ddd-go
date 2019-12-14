@@ -1,8 +1,8 @@
 package infrastructure
 
 import (
-	"encoding/json"
 	"ddd-go/domain"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -40,9 +40,34 @@ func SjSplSearch(searchRequest domain.SearchRequest) (domain.SearchResponse, err
 func SjSplBook() {
 
 }
-func SjSplSetPayment() {
+func SjSplSetPayment(setPaymentRequest domain.SetPaymentRequest) (domain.SetPaymentResponse, error) {
+	path := SjBookInfoPath()
+	payload := MapSjSetPaymentRequest(setPaymentRequest, path)
 
+	var response []byte = nil
+	var err error = nil
+	if SjUseMock() {
+		response, err = SetPaymentMock(), nil
+	} else {
+		response, err = SendRequest(path, "POST", payload)
+	}
+
+	var responseSpl domain.SjSetPaymentResponse
+	errParse := json.Unmarshal(response, &responseSpl)
+	if (errParse != nil) {
+		fmt.Println("Parse failed with error: ", errParse)
+	}
+	setPaymentData := domain.SetPaymentData{}
+	var setPaymentResponse domain.SetPaymentResponse
+	if err != nil {
+		setPaymentResponse = domain.SetPaymentResponse{domain.BaseResponse{false, "", "Internal Server Error"}, domain.SetPaymentData{}}
+	} else {
+		setPaymentData = MapSjSetPaymentResponse(responseSpl)
+		setPaymentResponse = domain.SetPaymentResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: setPaymentData}
+	}
+	return setPaymentResponse, err
 }
+
 func SjSplBookInfo(bookInfoRequest domain.BookInfoRequest) (domain.BookInfoResponse, error) {
 	path := SjBookInfoPath()
 	payload := MapSjBookInfoRequest(bookInfoRequest, path)
@@ -66,10 +91,8 @@ func SjSplBookInfo(bookInfoRequest domain.BookInfoRequest) (domain.BookInfoRespo
 		bookInfoResponse = domain.BookInfoResponse{domain.BaseResponse{false, "", "Internal Server Error"}, domain.BookInfoData{}}
 	} else {
 		bookInfoData = MapSjBookInfoResponse(responseSpl)
-		//searchResponse = domain.SearchResponse{domain.BaseResponse{true, "OK", ""}, searchResponseData}
 		bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: bookInfoData}
 	}
-	//return responseSpl, err
 	return bookInfoResponse, err
 	//LZYHFE
 }

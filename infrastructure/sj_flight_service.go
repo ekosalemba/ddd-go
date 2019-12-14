@@ -4,18 +4,19 @@ import (
 	"ddd-go/domain"
 )
 
-func SjSearch(searchRequest domain.SearchRequest) domain.SearchResponse {
-	searchResponse, _ := SjSplSearch(searchRequest)
+func SjSearch(req domain.SearchRequest) domain.SearchResponse {
+	searchResponse, _ := SjSplSearch(req)
 	return searchResponse
 }
 
 func SjBook() {
 
 }
-func SjBookInfo(bookInfoRequest domain.BookInfoRequest) domain.BookInfoResponse {
-	response, _ := SjSplBookInfo(bookInfoRequest)
+func SjBookInfo(req domain.BookInfoRequest) domain.BookInfoResponse {
+	response, _ := SjSplBookInfo(req)
 	return response
 }
-func SjSetPayment() {
-
+func SjSetPayment(req domain.SetPaymentRequest) domain.SetPaymentResponse {
+	response, _ := SjSplSetPayment(req)
+	return response
 }
