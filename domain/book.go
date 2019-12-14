@@ -232,6 +232,35 @@ func (data BookRequest) Validate() (bool, ErrorResponse) {
 			}
 		}
 	}
+	// selected itineraries
+	if len(strings.TrimSpace(data.SelectedItineraries.SearchKey)) == 0 {
+		messages = append(messages, ErrorMessage{"", "selected itineraries -> search key is required!"})
+	}
+	if len(data.SelectedItineraries.Journeys) == 0 {
+		messages = append(messages, ErrorMessage{"", "selected itineraries -> journeys is required!"})
+	} else {
+		for i := 0; i < len(data.SelectedItineraries.Journeys); i++ {
+			if len(data.SelectedItineraries.Journeys[i].JourneyType) == 0 {
+				messages = append(messages, ErrorMessage{"", "selected itineraries -> journeys" + strconv.Itoa(i) + "-> journey type is required!"})
+			} else {
+				var validJT = strings.ToUpper(data.SelectedItineraries.Journeys[i].JourneyType) == "DEPARTURE" || strings.ToUpper(data.SelectedItineraries.Journeys[i].JourneyType) == "RETURN"
+				if !validJT {
+					messages = append(messages, ErrorMessage{"", "selected itineraries -> journeys[" + strconv.Itoa(i) + "]-> journey type is only Departure and Return!"})
+				}
+				for iCabin := 0; iCabin < len(data.SelectedItineraries.Journeys[i].SelectedCabin); iCabin++ {
+					if len(data.SelectedItineraries.Journeys[i].SelectedCabin[iCabin].Key) == 0 {
+						messages = append(messages, ErrorMessage{"", "selected itineraries -> journeys[" + strconv.Itoa(i) + "]-> selected cabin[" + strconv.Itoa(iCabin) + "] -> key is required!"})
+					}
+					if len(data.SelectedItineraries.Journeys[i].SelectedCabin[iCabin].SubClass) == 0 {
+						messages = append(messages, ErrorMessage{"", "selected itineraries -> journeys[" + strconv.Itoa(i) + "]-> selected cabin[" + strconv.Itoa(iCabin) + "] -> subclass is required!"})
+					}
+				}
+			}
+		}
+	}
+	if data.Journey.ReturnStatus == true && len(data.SelectedItineraries.Journeys) < 2 {
+		messages = append(messages, ErrorMessage{"", "selected itineraries -> journeys is not complete!"})
+	}
 
 	if len(messages) > 0 {
 		valid = false
