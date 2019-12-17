@@ -219,15 +219,15 @@ func (data BookRequest) Validate() (bool, ErrorResponse) {
 				messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] adt assoc is not valid!"})
 			} else {
 				isExistAdtAssoc := false
-				for i := 0; i < len(adtAssoc); i++ {
-					if adtAssoc[i] == data.Pax.Inf[i].AdtAssoc {
+				for i2 := 0; i2 < len(adtAssoc); i2++ {
+					if adtAssoc[i2] == data.Pax.Inf[i].AdtAssoc {
 						isExistAdtAssoc = true
 					}
 				}
 				if !isExistAdtAssoc {
 					adtAssoc = append(adtAssoc, data.Pax.Inf[i].AdtAssoc)
 				} else {
-					messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] adt assoc duplicate!"})
+					messages = append(messages, ErrorMessage{"", "pax inf[" + strconv.Itoa(i) + "] adtAssoc duplicate!"})
 				}
 			}
 		}

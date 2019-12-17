@@ -31,8 +31,12 @@ func SjSplSearch(searchRequest domain.SearchRequest) (domain.SearchResponse, err
 	if err != nil {
 		searchResponse = domain.SearchResponse{domain.BaseResponse{false, "", "Internal Server Error"}, domain.SearchResponseData{}}
 	} else {
-		searchResponseData = MapSjSearchResponse(responseSpl)
-		searchResponse = domain.SearchResponse{domain.BaseResponse{true, "OK", ""}, searchResponseData}
+		if (responseSpl.ErrorCode == "EC:0000") {
+			searchResponseData = MapSjSearchResponse(responseSpl)
+			searchResponse = domain.SearchResponse{domain.BaseResponse{true, "OK", ""}, searchResponseData}
+		} else {
+			searchResponse = domain.SearchResponse{domain.BaseResponse{false, responseSpl.ErrorMessage, ""}, domain.SearchResponseData{}}
+		}
 	}
 	return searchResponse, err
 }
@@ -51,7 +55,7 @@ func SjSplSetPayment(setPaymentRequest domain.SetPaymentRequest) (domain.SetPaym
 
 	var responseSpl domain.SjSetPaymentResponse
 	errParse := json.Unmarshal(response, &responseSpl)
-	if (errParse != nil) {
+	if errParse != nil {
 		fmt.Println("Parse failed with error: ", errParse)
 	}
 	setPaymentData := domain.SetPaymentData{}
@@ -59,8 +63,12 @@ func SjSplSetPayment(setPaymentRequest domain.SetPaymentRequest) (domain.SetPaym
 	if err != nil {
 		setPaymentResponse = domain.SetPaymentResponse{domain.BaseResponse{false, "", "Internal Server Error"}, domain.SetPaymentData{}}
 	} else {
-		setPaymentData = MapSjSetPaymentResponse(responseSpl)
-		setPaymentResponse = domain.SetPaymentResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: setPaymentData}
+		if responseSpl.ErrorCode == "EC:0000" {
+			setPaymentData = MapSjSetPaymentResponse(responseSpl)
+			setPaymentResponse = domain.SetPaymentResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: setPaymentData}
+		} else {
+			setPaymentResponse = domain.SetPaymentResponse{BaseResponse: domain.BaseResponse{Success: false, Message: responseSpl.ErrorMessage, ErrorMessage: ""}, Data: domain.SetPaymentData{}}
+		}
 	}
 	return setPaymentResponse, err
 }
@@ -87,15 +95,19 @@ func SjSplBookInfo(bookInfoRequest domain.BookInfoRequest) (domain.BookInfoRespo
 	if err != nil {
 		bookInfoResponse = domain.BookInfoResponse{domain.BaseResponse{false, "", "Internal Server Error"}, domain.BookInfoData{}}
 	} else {
-		bookInfoData = MapSjBookInfoResponse(responseSpl)
-		bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: bookInfoData}
+		if responseSpl.ERRORCODE == "EC:0000" {
+			bookInfoData = MapSjBookInfoResponse(responseSpl)
+			bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: bookInfoData}
+		} else {
+			bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{false, responseSpl.ERRORMESSAGE, ""}, Data: domain.BookInfoData{}}
+		}
 	}
 	return bookInfoResponse, err
 	//LZYHFE
 }
 
 func SjSplBook(bookRequest domain.BookRequest) (domain.BookInfoResponse, error) {
-	path := SjBookInfoPath()
+	path := SjBookPath()
 	payload := MapSjBookRequest(bookRequest, path)
 
 	var response []byte = nil
@@ -108,7 +120,7 @@ func SjSplBook(bookRequest domain.BookRequest) (domain.BookInfoResponse, error) 
 
 	var responseSpl domain.SjBookInfoResponse
 	errParse := json.Unmarshal(response, &responseSpl)
-	if (errParse != nil) {
+	if errParse != nil {
 		fmt.Println("Parse failed with error: ", errParse)
 	}
 	bookInfoData := domain.BookInfoData{}
@@ -116,8 +128,12 @@ func SjSplBook(bookRequest domain.BookRequest) (domain.BookInfoResponse, error) 
 	if err != nil {
 		bookInfoResponse = domain.BookInfoResponse{domain.BaseResponse{false, "", "Internal Server Error"}, domain.BookInfoData{}}
 	} else {
-		bookInfoData = MapSjBookInfoResponse(responseSpl)
-		bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: bookInfoData}
+		if responseSpl.ERRORCODE == "EC:0000" {
+			bookInfoData = MapSjBookInfoResponse(responseSpl)
+			bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{true, "OK", ""}, Data: bookInfoData}
+		} else {
+			bookInfoResponse = domain.BookInfoResponse{BaseResponse: domain.BaseResponse{false, responseSpl.ERRORMESSAGE, ""}, Data: domain.BookInfoData{}}
+		}
 	}
 	return bookInfoResponse, err
 	//LZYHFE

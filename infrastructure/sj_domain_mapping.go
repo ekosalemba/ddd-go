@@ -182,7 +182,7 @@ func MapSjBookRequest(bookRequest domain.BookRequest, path string) *strings.Read
 		inf += "&InfantNames[" + index + "][0][Suffix]=" + strings.ToUpper(bookRequest.Pax.Inf[i].Suffix)
 		inf += "&InfantNames[" + index + "][0][FirstName]=" + bookRequest.Pax.Inf[i].FirstName
 		inf += "&InfantNames[" + index + "][0][LastName]=" + bookRequest.Pax.Inf[i].LastName
-		chd += "&InfantNames[" + index + "][0][Dob]=" + dobStr
+		inf += "&InfantNames[" + index + "][0][Dob]=" + dobStr
 		inf += "&InfantNames[" + index + "][0][Assoc]=" + strconv.Itoa(bookRequest.Pax.Inf[i].AdtAssoc)
 	}
 
@@ -197,7 +197,9 @@ func MapSjBookRequest(bookRequest domain.BookRequest, path string) *strings.Read
 		}
 	}
 	payload := strings.NewReader(
-		"CityFrom=" + bookRequest.Journey.Origin +
+		"Username=" + SjConfigGetUserName() +
+			"&Password=" + SjConfigGetPassword() +
+			"&CityFrom=" + bookRequest.Journey.Origin +
 			"&CityTo=" + bookRequest.Journey.Destination +
 			"&DepartDate=" + departDateStr +
 			"&ReturnStatus=" + returnStatus +
@@ -217,8 +219,6 @@ func MapSjBookRequest(bookRequest domain.BookRequest, path string) *strings.Read
 			selectedItineraries +
 			"&DEVICE_ID=" + SjConfigGetDeviceId() +
 			"&SUBSCRIBE_ID=" + SjConfigGetSubscribeId() +
-			"&USERNAME=" + SjConfigGetUserName() +
-			"&PASSWORD=" + SjConfigGetPassword() +
 			"&OS=" + SjConfigGetOs() +
 			"&APPS_NAME=" + SjConfigGetAppsName() +
 			"&APPS_VERSION=" + SjConfigGetAppsVersion() +
