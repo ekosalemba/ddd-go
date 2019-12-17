@@ -42,7 +42,7 @@ func SjSplSearch(searchRequest domain.SearchRequest) (domain.SearchResponse, err
 }
 
 func SjSplSetPayment(setPaymentRequest domain.SetPaymentRequest) (domain.SetPaymentResponse, error) {
-	path := SjBookInfoPath()
+	path := SjSetPaymentPath()
 	payload := MapSjSetPaymentRequest(setPaymentRequest, path)
 
 	var response []byte = nil

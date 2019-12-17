@@ -695,8 +695,8 @@ components:
               type: string
               example: abc
             FFPoint:
-              type: string
-              example: abc
+              type: integer
+              example: 20
 
     setPaymentResponse:
       type: object

@@ -344,7 +344,7 @@ func MapSjSetPaymentRequest(setPaymentRequest domain.SetPaymentRequest, path str
 			"&TENOR=" + setPaymentRequest.Payment.PaymentTenor +
 			"&FFNO=" + setPaymentRequest.FFInfo.FFNumber +
 			"&PASSWORD_FF=" + setPaymentRequest.FFInfo.FFPassword +
-			"&POINT=" + setPaymentRequest.FFInfo.FFPoint +
+			"&POINT=" + strconv.Itoa(setPaymentRequest.FFInfo.FFPoint) +
 			"&FF_TYPE=" + setPaymentRequest.FFInfo.FFType +
 
 			"&DEVICE_ID=" + SjConfigGetDeviceId() +

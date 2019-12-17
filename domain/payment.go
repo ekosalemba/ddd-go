@@ -26,7 +26,7 @@ type FFInfo struct {
 	FFType     string `json:"FFType"`
 	FFNumber   string `json:"FFNumber"`
 	FFPassword string `json:"FFPassword"`
-	FFPoint    string `json:"FFPoint"`
+	FFPoint    int    `json:"FFPoint"`
 }
 
 func (data SetPaymentRequest) Validate() (bool, ErrorResponse) {
