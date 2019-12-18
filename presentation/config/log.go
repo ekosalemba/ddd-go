@@ -62,3 +62,14 @@ func saveLogResponse(c echo.Context, responseBody []byte) {
 			reqGuid, currentTimestamp, c.Request().Method, c.Request().RequestURI, responseBody))
 	}
 }
+func Error(header string, data string) {
+	logType := "error"
+	logFileName := logType + "_" + time.Now().Format("2006-01-02") + ".log"
+	logFile, err := os.OpenFile("log/"+logType+"/"+logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		logger := log.New(logFile, "", log.LstdFlags)
+		logger.Println(fmt.Sprintf("%s : %s", header, data))
+	}
+}
