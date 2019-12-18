@@ -21,8 +21,9 @@ func RouteFlight(e *echo.Echo) {
 		if status != http.StatusOK {
 			return c.JSON(status, errorResponse)
 		}
-		fmt.Println(time.Now(), "Finish")
-		//time.Sleep(10 * time.Second)
+		//go asyncExample()
+		//time.Sleep(5 * time.Second)
+		fmt.Println(time.Now(), "Finish Response")
 		return c.JSON(status, response)
 	})
 
@@ -61,4 +62,10 @@ func RouteFlight(e *echo.Echo) {
 		}
 		return c.JSON(status, response)
 	})
+}
+func asyncExample() {
+
+	time.Sleep(10 * time.Second)
+	fmt.Println(time.Now(), "Finish Async Process")
+
 }
