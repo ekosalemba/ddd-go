@@ -11,6 +11,6 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 /presentation/config/config.json
+/presentation/log/*
 .idea/*
 /vendor/*
-/log/*
