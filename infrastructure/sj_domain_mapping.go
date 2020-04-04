@@ -1,13 +1,13 @@
 package infrastructure
 
 import (
-	"ddd-go/domain"
+	"ddd-go/domain/entity"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func MapSjSearchRequest(searchRequest domain.SearchRequest, path string) *strings.Reader {
+func MapSjSearchRequest(searchRequest entity.SearchRequest, path string) *strings.Reader {
 	returnStatus := "NO"
 	if (searchRequest.ReturnStatus) {
 		returnStatus = "YES"
@@ -40,11 +40,11 @@ func MapSjSearchRequest(searchRequest domain.SearchRequest, path string) *string
 
 }
 
-func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchResponseData {
-	searchResponseData := domain.SearchResponseData{}
-	schedules := []domain.Schedule{}
+func MapSjSearchResponse(responseSpl entity.SjSearchResponse) entity.SearchResponseData {
+	searchResponseData := entity.SearchResponseData{}
+	schedules := []entity.Schedule{}
 	for key, result := range responseSpl.Data {
-		schedule := domain.Schedule{}
+		schedule := entity.Schedule{}
 		if (key == 0) {
 			schedule.JourneyType = "Departure"
 		} else {
@@ -57,7 +57,7 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 				schedule.Destination = dataJourney.CityTo
 				schedule.DestinationName = dataJourney.CityToName
 			}
-			journey := domain.Journey{}
+			journey := entity.Journey{}
 			journey.Origin = dataJourney.CityFrom
 			journey.OriginName = dataJourney.CityFromName
 			journey.Destination = dataJourney.CityTo
@@ -70,7 +70,7 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 			journey.Description = dataJourney.Keterangan
 
 			for _, dataSegment := range dataJourney.Segments {
-				segment := domain.Segment{}
+				segment := entity.Segment{}
 				segment.CarrierCode = dataSegment.CarrierCode
 				segment.FlightNo = dataSegment.NoFlight
 				segment.Origin = dataSegment.DepartureStation
@@ -84,7 +84,7 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 				segment.RouteStatus = dataSegment.RouteStatus
 
 				for _, dataLeg := range dataSegment.Legs {
-					leg := domain.Leg{}
+					leg := entity.Leg{}
 					leg.Origin = dataLeg.DepartureStation
 					leg.OriginName = dataLeg.DepartureStationName
 					leg.Destination = dataLeg.ArrivalStation
@@ -99,10 +99,10 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 				journey.Segments = append(journey.Segments, segment)
 			}
 
-			availableCabinClass := domain.AvailableCabinClass{}
+			availableCabinClass := entity.AvailableCabinClass{}
 			availableCabinClass.CabinClass = "ECONOMY"
 			for _, dataSubClass := range dataJourney.ClassesAvailableB2C.Economy {
-				availableSubClass := domain.AvailableSubClass{}
+				availableSubClass := entity.AvailableSubClass{}
 
 				availableSubClass.SubClass = dataSubClass.Class
 				availableSubClass.SubClassKey = dataSubClass.Key
@@ -113,12 +113,12 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 				availableSubClass.Currency = dataSubClass.Currency
 				availableSubClass.Price, _ = strconv.ParseFloat(dataSubClass.Price, 64)
 				for _, dataPriceDetail := range dataSubClass.PriceDetail {
-					priceDetail := domain.PriceDetail{}
+					priceDetail := entity.PriceDetail{}
 					priceDetail.PaxType = dataPriceDetail.PaxCategory
 					priceDetail.TotalFare, _ = strconv.ParseFloat(dataPriceDetail.Total1, 64)
 					priceDetail.NtaFare, _ = strconv.ParseFloat(dataPriceDetail.Nta1, 64)
 					for _, dataFareComponent := range dataPriceDetail.FareComponent {
-						fareComponent := domain.FareComponent{}
+						fareComponent := entity.FareComponent{}
 						fareComponent.FareCode = dataFareComponent.FareChargeTypeCode
 						fareComponent.FareDesc = dataFareComponent.FareChargeTypeDesc
 						fareComponent.Currency = dataFareComponent.CurrencyCode
@@ -135,11 +135,11 @@ func MapSjSearchResponse(responseSpl domain.SjSearchResponse) domain.SearchRespo
 		}
 		schedules = append(schedules, schedule)
 	}
-	searchResponseData = domain.SearchResponseData{responseSpl.SearchKey, schedules}
+	searchResponseData = entity.SearchResponseData{responseSpl.SearchKey, schedules}
 	return searchResponseData
 }
 
-func MapSjBookRequest(bookRequest domain.BookRequest, path string) *strings.Reader {
+func MapSjBookRequest(bookRequest entity.BookRequest, path string) *strings.Reader {
 	returnStatus := "NO"
 	if bookRequest.Journey.ReturnStatus {
 		returnStatus = "YES"
@@ -227,7 +227,7 @@ func MapSjBookRequest(bookRequest domain.BookRequest, path string) *strings.Read
 	return payload
 }
 
-func MapSjBookInfoRequest(bookInfoRequest domain.BookInfoRequest, path string) *strings.Reader {
+func MapSjBookInfoRequest(bookInfoRequest entity.BookInfoRequest, path string) *strings.Reader {
 	payload := strings.NewReader(
 		"BookingCode=" + bookInfoRequest.BookingCode +
 			"&DEVICE_ID=" + SjConfigGetDeviceId() +
@@ -242,8 +242,8 @@ func MapSjBookInfoRequest(bookInfoRequest domain.BookInfoRequest, path string) *
 	return payload
 }
 
-func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInfoData {
-	bookInfoData := domain.BookInfoData{}
+func MapSjBookInfoResponse(responseSpl entity.SjBookInfoResponse) entity.BookInfoData {
+	bookInfoData := entity.BookInfoData{}
 	bookInfoData.BookingCode = responseSpl.DATA.BookingCode
 	bookInfoData.NumericBookingCode = responseSpl.DATA.NUMERICBOOKINGCODE
 	bookInfoData.PromoCode = responseSpl.DATA.PromoCode
@@ -261,7 +261,7 @@ func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInf
 	bookInfoData.ItineraryDetails.ReservationDetails.TimeInfoDescription = responseSpl.DATA.YourItineraryDetails.ReservationDetails.TimeDescription
 
 	for _, paxDetail := range responseSpl.DATA.YourItineraryDetails.PassengerDetails {
-		passengerDetail := domain.PassengerDetail{}
+		passengerDetail := entity.PassengerDetail{}
 		passengerDetail.No, _ = strconv.Atoi(paxDetail.No)
 		passengerDetail.Suffix = paxDetail.FirstName
 		passengerDetail.FirstName = paxDetail.FirstName
@@ -284,14 +284,14 @@ func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInf
 	bookInfoData.ItineraryDetails.PaymentDetails.NtaFare, _ = strconv.ParseFloat(responseSpl.DATA.YourItineraryDetails.PaymentDetails.Nta, 64)
 
 	for i, splJourney := range responseSpl.DATA.YourItineraryDetails.ItineraryDetails.Journey {
-		journey := domain.BookJourney{}
+		journey := entity.BookJourney{}
 		if i == 0 {
 			journey.JourneyType = "Departure"
 		} else {
 			journey.JourneyType = "Return"
 		}
 		for _, splSegment := range splJourney.Segment {
-			segment := domain.BookSegment{}
+			segment := entity.BookSegment{}
 			segment.FlownDate = splSegment.FlownDate
 			segment.CarrierCode = splSegment.FlightNo[0:2]
 			segment.FlightNo = splSegment.FlightNo
@@ -311,7 +311,7 @@ func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInf
 	}
 
 	for _, splContact := range responseSpl.DATA.YourItineraryDetails.ContactList {
-		contact := domain.Contact{}
+		contact := entity.Contact{}
 		contact.Type = splContact.Type
 		contact.Value = splContact.Value
 		contact.Description = splContact.Description
@@ -322,7 +322,7 @@ func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInf
 	bookInfoData.ItineraryDetails.AgentDetails.IssuedBy = responseSpl.DATA.YourItineraryDetails.AgentDetails.IssuedBy
 
 	for _, splRemark := range responseSpl.DATA.YourItineraryDetails.BookingRemarks {
-		remark := domain.BookingRemark{}
+		remark := entity.BookingRemark{}
 		remark.CommentText = splRemark.CommentText
 		remark.CreatedBy = splRemark.CreatedBy
 		remark.CreatedDate = splRemark.CreatedDate
@@ -333,7 +333,7 @@ func MapSjBookInfoResponse(responseSpl domain.SjBookInfoResponse) domain.BookInf
 	return bookInfoData
 }
 
-func MapSjSetPaymentRequest(setPaymentRequest domain.SetPaymentRequest, path string) *strings.Reader {
+func MapSjSetPaymentRequest(setPaymentRequest entity.SetPaymentRequest, path string) *strings.Reader {
 	payload := strings.NewReader(
 		"BOOKING_CODE=" + setPaymentRequest.BookingCode +
 			"&NAMA_PEMEGANG_KARTU=" + setPaymentRequest.Payment.PaymentCardName +
@@ -359,8 +359,8 @@ func MapSjSetPaymentRequest(setPaymentRequest domain.SetPaymentRequest, path str
 	return payload
 }
 
-func MapSjSetPaymentResponse(responseSpl domain.SjSetPaymentResponse) domain.SetPaymentData {
-	setPaymentData := domain.SetPaymentData{}
+func MapSjSetPaymentResponse(responseSpl entity.SjSetPaymentResponse) entity.SetPaymentData {
+	setPaymentData := entity.SetPaymentData{}
 	setPaymentData.PaymentCode = responseSpl.Data[0].PaymentCode
 	setPaymentData.PaymentMethod = responseSpl.Data[0].PaymentMethod
 	setPaymentData.PaymentMethodDescription = responseSpl.Data[0].PaymentMethodDescription

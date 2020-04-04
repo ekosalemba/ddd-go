@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"ddd-go/application"
-	"ddd-go/domain"
+	"ddd-go/domain/entity"
 	"fmt"
 	"github.com/labstack/echo"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 
 func RouteFlight(e *echo.Echo) {
 	e.POST("/v1/search/:vendorCode", func(c echo.Context) error {
-		request := new(domain.SearchRequest)
+		request := new(entity.SearchRequest)
 		if err := c.Bind(request); err != nil {
 			return err
 		}
@@ -28,7 +28,7 @@ func RouteFlight(e *echo.Echo) {
 	})
 
 	e.POST("/v1/book", func(c echo.Context) error {
-		request := new(domain.BookRequest)
+		request := new(entity.BookRequest)
 		if err := c.Bind(request); err != nil {
 			return err
 		}
@@ -40,7 +40,7 @@ func RouteFlight(e *echo.Echo) {
 	})
 
 	e.POST("/v1/bookInfo", func(c echo.Context) error {
-		request := new(domain.BookInfoRequest)
+		request := new(entity.BookInfoRequest)
 		if err := c.Bind(request); err != nil {
 			return err
 		}
@@ -52,7 +52,7 @@ func RouteFlight(e *echo.Echo) {
 	})
 
 	e.POST("/v1/setPayment", func(c echo.Context) error {
-		request := new(domain.SetPaymentRequest)
+		request := new(entity.SetPaymentRequest)
 		if err := c.Bind(request); err != nil {
 			return err
 		}

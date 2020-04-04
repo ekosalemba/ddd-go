@@ -1,4 +1,4 @@
-package domain
+package entity
 
 type BaseResponse struct {
 	Success      bool   `json:"success" xml:"success"`
